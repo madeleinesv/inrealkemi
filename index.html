@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inreal Kemi — Jordad Magi för det Moderna Livet</title>
+  <meta name="description" content="Handgjorda ritualobjekt & heliga botanicals. Rotat i nordisk shamanisk tradition. Klart för det moderna livet." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --moss: #2D3A27; --bark: #4B3621; --clay: #7A5C3E;
+      --sand: #C4A882; --cream: #F5F2ED; --fog: #EAE5DC;
+      --white: #FDFBF8; --accent: #8B6E4E;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Jost', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--moss); font-family: var(--sans); overflow-x: hidden; }
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 3rem; background: rgba(245,242,237,0.93); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(75,54,33,0.1); transition: all 0.4s ease; }
+    .nav.scrolled { padding: 0.8rem 3rem; box-shadow: 0 2px 20px rgba(45,58,39,0.08); }
+    .nav-logo { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: var(--moss); letter-spacing: 0.08em; text-decoration: none; }
+    .nav-logo span { color: var(--clay); font-style: italic; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-family: var(--sans); font-size: 0.78rem; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bark); text-decoration: none; position: relative; padding-bottom: 2px; transition: color 0.3s; }
+    .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--clay); transition: width 0.3s ease; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a:hover { color: var(--moss); }
+    .nav-right { display: flex; align-items: center; gap: 1.4rem; }
+    .cart-btn { background: var(--moss); color: var(--cream); border: none; padding: 0.6rem 1.4rem; font-family: var(--sans); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+    .cart-btn:hover { background: var(--bark); }
+    /* HERO */
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; overflow: hidden; }
+    .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 5rem 4rem 5rem 5rem; background: var(--cream); position: relative; }
+    .hero-left::before { content: ''; position: absolute; top: 15%; left: -2px; width: 1px; height: 40%; background: linear-gradient(to bottom, transparent, var(--sand), transparent); }
+    .hero-tag { font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--clay); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; animation: fadeUp 0.8s ease forwards; }
+    .hero-tag::before { content: ''; width: 30px; height: 1px; background: var(--clay); }
+    .hero-h1 { font-family: var(--serif); font-size: clamp(3rem, 5vw, 5rem); font-weight: 300; line-height: 1.1; color: var(--moss); margin-bottom: 1.8rem; animation: fadeUp 0.8s 0.15s ease both; }
+    .hero-h1 em { font-style: italic; color: var(--clay); }
+    .hero-sub { font-family: var(--sans); font-size: 0.95rem; font-weight: 300; line-height: 1.8; color: var(--bark); max-width: 400px; margin-bottom: 3rem; opacity: 0.9; animation: fadeUp 0.8s 0.3s ease both; }
+    .hero-ctas { display: flex; gap: 1rem; align-items: center; animation: fadeUp 0.8s 0.45s ease both; }
+    .btn-primary { background: var(--moss); color: var(--cream); padding: 1rem 2.2rem; border: none; cursor: pointer; font-family: var(--sans); font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.6rem; }
+    .btn-primary:hover { background: var(--bark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(45,58,39,0.2); }
+    .btn-ghost { background: transparent; color: var(--moss); padding: 1rem 2rem; border: 1px solid rgba(45,58,39,0.3); cursor: pointer; font-family: var(--sans); font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase; transition: all 0.3s; }
+    .btn-ghost:hover { border-color: var(--moss); background: rgba(45,58,39,0.04); }
+    .hero-right { position: relative; overflow: hidden; background: linear-gradient(135deg, var(--moss) 0%, #1a2416 40%, var(--bark) 100%); }
+    .hero-img-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+    .hero-mandala { width: 340px; height: 340px; position: relative; display: flex; align-items: center; justify-content: center; animation: slowRotate 40s linear infinite; }
+    .hero-mandala svg { width: 100%; height: 100%; opacity: 0.35; }
+    .hero-center-text { position: absolute; text-align: center; font-family: var(--serif); color: var(--cream); animation: slowRotate 60s linear infinite reverse; }
+    .hero-center-text .big { font-size: 4rem; font-weight: 300; display: block; font-style: italic; }
+    .hero-center-text .small { font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase; opacity: 0.6; font-family: var(--sans); }
+    .hero-badge { position: absolute; bottom: 3rem; right: 3rem; background: rgba(245,242,237,0.1); border: 1px solid rgba(245,242,237,0.2); padding: 1.2rem 1.6rem; backdrop-filter: blur(8px); color: var(--cream); text-align: center; }
+    .hero-badge .num { font-family: var(--serif); font-size: 2.2rem; font-weight: 300; display: block; }
+    .hero-badge .lbl { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.7; font-family: var(--sans); }
+    .hero-scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(245,242,237,0.5); font-family: var(--sans); animation: bounce 2s ease-in-out infinite; }
+    .hero-scroll span { width: 1px; height: 40px; background: linear-gradient(to bottom, rgba(245,242,237,0.4), transparent); }
+    /* MARQUEE */
+    .marquee-bar { background: var(--moss); color: var(--sand); padding: 0.9rem 0; overflow: hidden; }
+    .marquee-track { display: flex; gap: 3rem; animation: marquee 22s linear infinite; white-space: nowrap; }
+    .marquee-item { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; display: flex; align-items: center; gap: 1.5rem; }
+    .marquee-item::after { content: '✦'; opacity: 0.5; }
+    /* SECTIONS */
+    .section { padding: 6rem 5rem; }
+    .section-label { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--clay); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 1rem; }
+    .section-label::before { content: ''; width: 24px; height: 1px; background: var(--clay); }
+    .section-title { font-family: var(--serif); font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; color: var(--moss); line-height: 1.15; margin-bottom: 1rem; }
+    .section-title em { font-style: italic; color: var(--clay); }
+    .section-sub { font-family: var(--sans); font-size: 0.9rem; font-weight: 300; color: var(--bark); line-height: 1.8; max-width: 480px; }
+    /* PRODUCTS */
+    .products-section { background: var(--white); }
+    .products-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3.5rem; }
+    .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; }
+    .product-card { background: var(--fog); position: relative; overflow: hidden; cursor: pointer; transition: all 0.4s ease; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(45,58,39,0.12); }
+    .product-card.featured { grid-row: span 2; }
+    .product-img { height: 280px; position: relative; overflow: hidden; background: linear-gradient(135deg, var(--fog) 0%, var(--sand) 100%); display: flex; align-items: center; justify-content: center; }
+    .product-card.featured .product-img { height: 100%; min-height: 480px; }
+    .product-img-icon { font-size: 4rem; opacity: 0.4; }
+    .product-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(45,58,39,0.7) 0%, transparent 60%); opacity: 0; transition: opacity 0.4s; display: flex; align-items: flex-end; padding: 1.5rem; }
+    .product-card:hover .product-overlay { opacity: 1; }
+    .overlay-btn { background: var(--cream); color: var(--moss); padding: 0.7rem 1.4rem; border: none; cursor: pointer; font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; width: 100%; transition: background 0.3s; }
+    .overlay-btn:hover { background: var(--sand); }
+    .product-info { padding: 1.4rem 1.6rem 1.8rem; }
+    .product-cat { font-family: var(--sans); font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--clay); margin-bottom: 0.5rem; }
+    .product-name { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; color: var(--moss); margin-bottom: 0.4rem; }
+    .product-desc { font-family: var(--sans); font-size: 0.8rem; font-weight: 300; color: var(--bark); line-height: 1.6; margin-bottom: 1rem; }
+    .product-footer { display: flex; justify-content: space-between; align-items: center; }
+    .product-price { font-family: var(--serif); font-size: 1.2rem; color: var(--bark); }
+    .add-cart { background: transparent; border: 1px solid var(--moss); color: var(--moss); padding: 0.45rem 0.9rem; font-family: var(--sans); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+    .add-cart:hover { background: var(--moss); color: var(--cream); }
+    /* RITUAL */
+    .ritual-section { background: linear-gradient(135deg, var(--moss) 0%, #1f2d1b 60%, var(--bark) 100%); color: var(--cream); padding: 7rem 5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; position: relative; overflow: hidden; }
+    .ritual-section::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(196,168,130,0.08) 0%, transparent 70%); top: 50%; left: 55%; transform: translate(-50%,-50%); pointer-events: none; }
+    .ritual-label { color: var(--sand); }
+    .ritual-label::before { background: var(--sand); }
+    .ritual-title { color: var(--cream); }
+    .ritual-title em { color: var(--sand); }
+    .ritual-sub { color: rgba(245,242,237,0.7); }
+    .ritual-steps { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .ritual-step { display: flex; gap: 1.4rem; align-items: flex-start; }
+    .step-num { font-family: var(--serif); font-size: 2.5rem; font-weight: 300; color: var(--sand); line-height: 1; flex-shrink: 0; width: 2.5rem; }
+    .step-title { font-family: var(--serif); font-size: 1.1rem; color: var(--cream); margin-bottom: 0.3rem; }
+    .step-text { font-family: var(--sans); font-size: 0.82rem; font-weight: 300; color: rgba(245,242,237,0.65); line-height: 1.7; }
+    .ritual-visual { display: flex; align-items: center; justify-content: center; }
+    .ritual-circle { width: 380px; height: 380px; border-radius: 50%; border: 1px solid rgba(196,168,130,0.2); display: flex; align-items: center; justify-content: center; position: relative; animation: slowRotate 60s linear infinite; }
+    .ritual-circle::before { content: ''; position: absolute; inset: 20px; border-radius: 50%; border: 1px solid rgba(196,168,130,0.1); }
+    .ritual-rune { font-family: var(--serif); font-size: 6rem; font-weight: 300; color: rgba(196,168,130,0.3); font-style: italic; animation: slowRotate 60s linear infinite reverse; }
+    /* TESTIMONIALS */
+    .testimonials { background: var(--fog); padding: 6rem 5rem; }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3.5rem; }
+    .testimonial { background: var(--white); padding: 2.5rem; border-left: 2px solid var(--sand); transition: transform 0.3s, box-shadow 0.3s; }
+    .testimonial:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(45,58,39,0.08); }
+    .testimonial-quote { font-family: var(--serif); font-size: 1rem; font-weight: 300; line-height: 1.75; color: var(--bark); margin-bottom: 1.5rem; font-style: italic; }
+    .testimonial-author { font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--clay); }
+    .stars { color: var(--sand); margin-bottom: 1rem; font-size: 0.9rem; }
+    /* NEWSLETTER */
+    .newsletter { background: var(--bark); color: var(--cream); padding: 5rem; text-align: center; }
+    .newsletter-title { font-family: var(--serif); font-size: clamp(2rem,3.5vw,3rem); font-weight: 300; margin-bottom: 0.8rem; }
+    .newsletter-title em { font-style: italic; color: var(--sand); }
+    .newsletter-sub { font-family: var(--sans); font-size: 0.88rem; font-weight: 300; opacity: 0.7; margin-bottom: 2.5rem; line-height: 1.7; }
+    .newsletter-form { display: flex; max-width: 480px; margin: 0 auto; }
+    .newsletter-input { flex: 1; padding: 0.95rem 1.4rem; background: rgba(245,242,237,0.08); border: 1px solid rgba(245,242,237,0.2); border-right: none; color: var(--cream); font-family: var(--sans); font-size: 0.85rem; outline: none; }
+    .newsletter-input::placeholder { color: rgba(245,242,237,0.4); }
+    .newsletter-submit { background: var(--sand); color: var(--bark); border: none; padding: 0.95rem 1.8rem; font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; font-weight: 500; transition: background 0.3s; white-space: nowrap; }
+    .newsletter-submit:hover { background: var(--cream); }
+    /* FOOTER */
+    .footer { background: var(--moss); color: var(--cream); padding: 4rem 5rem 2rem; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
+    .footer-logo { font-family: var(--serif); font-size: 1.8rem; font-weight: 300; color: var(--cream); margin-bottom: 1rem; }
+    .footer-logo span { color: var(--sand); font-style: italic; }
+    .footer-tagline { font-family: var(--sans); font-size: 0.82rem; font-weight: 300; opacity: 0.6; line-height: 1.7; max-width: 220px; }
+    .footer-col h4 { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--sand); margin-bottom: 1.2rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+    .footer-col a { font-family: var(--sans); font-size: 0.82rem; font-weight: 300; color: rgba(245,242,237,0.6); text-decoration: none; transition: color 0.3s; }
+    .footer-col a:hover { color: var(--sand); }
+    .footer-bottom { border-top: 1px solid rgba(245,242,237,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-family: var(--sans); font-size: 0.72rem; opacity: 0.4; }
+    .footer-lang { display: flex; gap: 1rem; }
+    .footer-lang button { background: none; border: none; color: var(--cream); cursor: pointer; opacity: 0.5; font-size: 0.72rem; font-family: var(--sans); transition: opacity 0.3s; }
+    .footer-lang button.active, .footer-lang button:hover { opacity: 1; }
+    /* CART */
+    .cart-drawer { position: fixed; top: 0; right: 0; width: 380px; height: 100vh; z-index: 200; background: var(--white); box-shadow: -4px 0 40px rgba(45,58,39,0.15); transform: translateX(100%); transition: transform 0.4s ease; display: flex; flex-direction: column; }
+    .cart-drawer.open { transform: translateX(0); }
+    .cart-overlay { position: fixed; inset: 0; z-index: 190; background: rgba(45,58,39,0.3); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity 0.4s; }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .cart-header { padding: 2rem; border-bottom: 1px solid var(--fog); display: flex; justify-content: space-between; align-items: center; }
+    .cart-title { font-family: var(--serif); font-size: 1.4rem; color: var(--moss); }
+    .cart-close { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: var(--bark); }
+    .cart-body { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
+    .cart-empty { text-align: center; padding: 3rem 0; color: var(--bark); font-family: var(--sans); font-size: 0.9rem; opacity: 0.6; }
+    .cart-empty .icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; opacity: 0.4; }
+    .cart-item { display: flex; gap: 1rem; padding: 1.2rem 0; border-bottom: 1px solid var(--fog); }
+    .cart-item-img { width: 70px; height: 70px; background: var(--fog); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-family: var(--serif); font-size: 0.95rem; color: var(--moss); margin-bottom: 0.3rem; }
+    .cart-item-price { font-family: var(--sans); font-size: 0.82rem; color: var(--clay); }
+    .cart-item-remove { background: none; border: none; cursor: pointer; color: var(--sand); font-size: 1rem; }
+    .cart-footer { padding: 1.5rem 2rem 2rem; border-top: 1px solid var(--fog); }
+    .cart-total { display: flex; justify-content: space-between; font-family: var(--serif); font-size: 1.1rem; color: var(--moss); margin-bottom: 1.5rem; }
+    .checkout-btn { width: 100%; background: var(--moss); color: var(--cream); border: none; padding: 1rem; cursor: pointer; font-family: var(--sans); font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase; transition: background 0.3s; }
+    .checkout-btn:hover { background: var(--bark); }
+    /* TOAST */
+    .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--moss); color: var(--cream); padding: 0.9rem 2rem; z-index: 300; font-family: var(--sans); font-size: 0.8rem; letter-spacing: 0.12em; transition: transform 0.4s ease; border-left: 3px solid var(--sand); }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    /* ANIMATIONS */
+    @keyframes slowRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .products-grid { grid-template-columns: 1fr 1fr; }
+      .product-card.featured { grid-row: span 1; }
+      .product-card.featured .product-img { min-height: 280px; }
+      .ritual-section { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
+      .ritual-visual { display: none; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .nav-links { display: none; }
+      .section { padding: 4rem 2rem; }
+      .hero-left { padding: 3rem 2rem; }
+      .newsletter { padding: 4rem 2rem; }
+      .footer { padding: 3rem 2rem 2rem; }
+      .cart-drawer { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const products = [
+      { id: 1, name: "Skog Ritual Set", cat: "Ceremony", price: "895 kr", desc: "Sacred forest botanicals for grounding ceremony. Juniper, cedar & pine.", icon: "🌿", featured: true },
+      { id: 2, name: "Jord Amulet", cat: "Jewellery", price: "645 kr", desc: "Hand-carved oak & labradorite. Worn for protection & presence.", icon: "🪨" },
+      { id: 3, name: "Urfolk Smudge", cat: "Cleansing", price: "325 kr", desc: "Nordic white sage & yarrow. Ethically sourced in Skandinavien.", icon: "🌾" },
+      { id: 4, name: "Rötter Balm", cat: "Apothecary", price: "495 kr", desc: "Grounding body balm. Vetiver, birch tar & arctic cloudberry.", icon: "🫙" },
+      { id: 5, name: "Stillhet Oracle", cat: "Divination", price: "785 kr", desc: "48-card deck of Nordic earth wisdom. Printed on stone paper.", icon: "🎴" },
+    ];
+
+    const testimonials = [
+      { q: "Produkterna känns levande. Jag håller i Jord-amuletten varje morgon för att börja dagen rätt.", author: "Astrid L., Stockholm", stars: 5 },
+      { q: "The Skog Ritual Set transformed my evening practice. The scent alone brings me back to the forest.", author: "Emma V., Göteborg", stars: 5 },
+      { q: "Snabb leverans, vacker förpackning och en kvalitet som man verkligen känner på. Helt fantastiskt.", author: "Lars B., Malmö", stars: 5 },
+    ];
+
+    const marqueeItems = ["Fri frakt över 600 kr","Etiska ingredienser","Handgjorda i Norden","Certifierat ekologiskt","Fri frakt över 600 kr","Etiska ingredienser","Handgjorda i Norden","Certifierat ekologiskt"];
+
+    function App() {
+      const [cartOpen, setCartOpen] = useState(false);
+      const [cart, setCart] = useState([]);
+      const [toast, setToast] = useState(false);
+      const [scrolled, setScrolled] = useState(false);
+      const [lang, setLang] = useState("SV");
+      const [email, setEmail] = useState("");
+
+      useEffect(() => {
+        const fn = () => setScrolled(window.scrollY > 40);
+        window.addEventListener("scroll", fn);
+        return () => window.removeEventListener("scroll", fn);
+      }, []);
+
+      const addToCart = (product) => {
+        setCart(prev => {
+          const exists = prev.find(i => i.id === product.id);
+          if (exists) return prev.map(i => i.id === product.id ? {...i, qty: i.qty + 1} : i);
+          return [...prev, {...product, qty: 1}];
+        });
+        setToast(true);
+        setTimeout(() => setToast(false), 2200);
+      };
+
+      const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
+      const cartCount = cart.reduce((s, i) => s + i.qty, 0);
+      const cartTotal = cart.reduce((s, i) => s + i.qty * parseInt(i.price), 0);
+
+      return (
+        <>
+          {/* NAV */}
+          <nav className={`nav${scrolled ? " scrolled" : ""}`}>
+            <a href="#" className="nav-logo">Inreal<span>Kemi</span></a>
+            <ul className="nav-links">
+              <li><a href="#products">Butik</a></li>
+              <li><a href="#ritual">Ritualer</a></li>
+              <li><a href="#om">Om Oss</a></li>
+              <li><a href="#nyhetsbrev">Journal</a></li>
+            </ul>
+            <div className="nav-right">
+              <button className="cart-btn" onClick={() => setCartOpen(true)}>
+                Korg {cartCount > 0 && `(${cartCount})`}
+              </button>
+            </div>
+          </nav>
+
+          {/* HERO */}
+          <section className="hero">
+            <div className="hero-left">
+              <div className="hero-tag">Grundat i naturen</div>
+              <h1 className="hero-h1">Bär jordens<br /><em>kraft</em><br />med dig</h1>
+              <p className="hero-sub">Handgjorda ritualobjekt & heliga botanicals för dig som söker djupare närvaro. Rotat i nordisk shamanisk tradition. Klart för det moderna livet.</p>
+              <div className="hero-ctas">
+                <button className="btn-primary" onClick={() => document.getElementById('products').scrollIntoView({behavior:'smooth'})}>Utforska butiken →</button>
+                <button className="btn-ghost" onClick={() => document.getElementById('ritual').scrollIntoView({behavior:'smooth'})}>Vår filosofi</button>
+              </div>
+            </div>
+            <div className="hero-right">
+              <div className="hero-img-placeholder">
+                <div className="hero-mandala">
+                  <svg viewBox="0 0 340 340" fill="none">
+                    <circle cx="170" cy="170" r="160" stroke="#C4A882" strokeWidth="0.5"/>
+                    <circle cx="170" cy="170" r="130" stroke="#C4A882" strokeWidth="0.5"/>
+                    <circle cx="170" cy="170" r="100" stroke="#C4A882" strokeWidth="0.5"/>
+                    <circle cx="170" cy="170" r="70" stroke="#C4A882" strokeWidth="0.5"/>
+                    <circle cx="170" cy="170" r="40" stroke="#C4A882" strokeWidth="0.5"/>
+                    {[0,30,60,90,120,150,180,210,240,270,300,330].map(a => (
+                      <line key={a} x1="170" y1="10" x2="170" y2="330" stroke="#C4A882" strokeWidth="0.4"
+                        style={{transformOrigin:'170px 170px', transform:`rotate(${a}deg)`}} />
+                    ))}
+                    {[0,45,90,135].map(a => (
+                      <ellipse key={a} cx="170" cy="170" rx="80" ry="30" stroke="#C4A882" strokeWidth="0.3"
+                        style={{transformOrigin:'170px 170px', transform:`rotate(${a}deg)`}} />
+                    ))}
+                  </svg>
+                </div>
+                <div className="hero-center-text">
+                  <span className="big">✦</span>
+                  <span className="small">inreal kemi</span>
+                </div>
+                <div className="hero-badge">
+                  <span className="num">2 400+</span>
+                  <span className="lbl">nöjda kunder</span>
+                </div>
+                <div className="hero-scroll">Skrolla<span /></div>
+              </div>
+            </div>
+          </section>
+
+          {/* MARQUEE */}
+          <div className="marquee-bar">
+            <div className="marquee-track">
+              {marqueeItems.map((t, i) => <span key={i} className="marquee-item">{t}</span>)}
+            </div>
+          </div>
+
+          {/* PRODUCTS */}
+          <section className="section products-section" id="products">
+            <div className="products-header">
+              <div>
+                <div className="section-label">Vår kollektion</div>
+                <h2 className="section-title">Handplockade för <em>jordnärvaro</em></h2>
+              </div>
+              <button className="btn-ghost">Se alla →</button>
+            </div>
+            <div className="products-grid">
+              {products.map(p => (
+                <div key={p.id} className={`product-card${p.featured ? " featured" : ""}`}>
+                  <div className="product-img">
+                    <div className="product-img-icon">{p.icon}</div>
+                    <div className="product-overlay">
+                      <button className="overlay-btn" onClick={() => addToCart(p)}>Lägg i korg</button>
+                    </div>
+                  </div>
+                  <div className="product-info">
+                    <div className="product-cat">{p.cat}</div>
+                    <div className="product-name">{p.name}</div>
+                    <div className="product-desc">{p.desc}</div>
+                    <div className="product-footer">
+                      <div className="product-price">{p.price}</div>
+                      <button className="add-cart" onClick={() => addToCart(p)}>+ Korg</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* RITUAL */}
+          <section className="ritual-section" id="ritual">
+            <div>
+              <div className="section-label ritual-label">Vår filosofi</div>
+              <h2 className="section-title ritual-title">Ritualen som <em>förändrar</em> allt</h2>
+              <p className="section-sub ritual-sub">Varje produkt är en bro mellan det gamla och det nu. Vi destillerar shamanisk visdom till vardagliga objekt som håller dig förankrad i vem du är.</p>
+              <div className="ritual-steps">
+                {[["01","Välj din ritual","Börja med det som kallar på dig. Doft, beröring eller symbol."],
+                  ["02","Skapa intentionen","Sätt en avsikt. Varje användning förstärker din förbindelse med marken."],
+                  ["03","Bär det med dig","Ritualen reser med dig. Ur hemmet, in i världen."]].map(([n,t,d]) => (
+                  <div key={n} className="ritual-step">
+                    <div className="step-num">{n}</div>
+                    <div>
+                      <div className="step-title">{t}</div>
+                      <div className="step-text">{d}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="ritual-visual">
+              <div className="ritual-circle">
+                <div className="ritual-rune">ᚹ</div>
+              </div>
+            </div>
+          </section>
+
+          {/* TESTIMONIALS */}
+          <section className="section testimonials" id="om">
+            <div className="section-label">Vad kunderna säger</div>
+            <h2 className="section-title">Rötter, <em>berättelser</em></h2>
+            <div className="testimonials-grid">
+              {testimonials.map((t, i) => (
+                <div key={i} className="testimonial">
+                  <div className="stars">{"★".repeat(t.stars)}</div>
+                  <p className="testimonial-quote">"{t.q}"</p>
+                  <div className="testimonial-author">{t.author}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* NEWSLETTER */}
+          <section className="newsletter" id="nyhetsbrev">
+            <h2 className="newsletter-title">Gå med i <em>cirkeln</em></h2>
+            <p className="newsletter-sub">Månvisa ritualer, nya produktsläpp & djup jordomfamling.<br />Direkt i din inkorg. Aldrig spam.</p>
+            <div className="newsletter-form">
+              <input className="newsletter-input" placeholder="din@email.se" value={email} onChange={e => setEmail(e.target.value)} />
+              <button className="newsletter-submit" onClick={() => setEmail("")}>Gå med →</button>
+            </div>
+          </section>
+
+          {/* FOOTER */}
+          <footer className="footer">
+            <div className="footer-top">
+              <div>
+                <div className="footer-logo">Inreal<span>Kemi</span></div>
+                <p className="footer-tagline">Heliga objekt för moderna rötter. Handgjort med kärlek i Norden.</p>
+              </div>
+              <div className="footer-col">
+                <h4>Butik</h4>
+                <ul>
+                  <li><a href="#">Alla produkter</a></li>
+                  <li><a href="#">Ritualer</a></li>
+                  <li><a href="#">Botanicals</a></li>
+                  <li><a href="#">Smycken</a></li>
+                  <li><a href="#">Presentkort</a></li>
+                </ul>
+              </div>
+              <div className="footer-col">
+                <h4>Info</h4>
+                <ul>
+                  <li><a href="#">Om oss</a></li>
+                  <li><a href="#">Hållbarhet</a></li>
+                  <li><a href="#">Frakt & retur</a></li>
+                  <li><a href="#">FAQ</a></li>
+                </ul>
+              </div>
+              <div className="footer-col">
+                <h4>Följ oss</h4>
+                <ul>
+                  <li><a href="#">Instagram</a></li>
+                  <li><a href="#">Pinterest</a></li>
+                  <li><a href="#">TikTok</a></li>
+                  <li><a href="#">Nyhetsbrev</a></li>
+                </ul>
+              </div>
+            </div>
+            <div className="footer-bottom">
+              <span className="footer-copy">© 2026 Inreal Kemi. Alla rättigheter förbehållna.</span>
+              <div className="footer-lang">
+                <button className={lang==="SV"?"active":""} onClick={()=>setLang("SV")}>SV</button>
+                <span style={{opacity:0.3}}>|</span>
+                <button className={lang==="EN"?"active":""} onClick={()=>setLang("EN")}>EN</button>
+              </div>
+            </div>
+          </footer>
+
+          {/* CART OVERLAY */}
+          <div className={`cart-overlay${cartOpen?" open":""}`} onClick={() => setCartOpen(false)} />
+
+          {/* CART DRAWER */}
+          <div className={`cart-drawer${cartOpen?" open":""}`}>
+            <div className="cart-header">
+              <div className="cart-title">Din korg</div>
+              <button className="cart-close" onClick={() => setCartOpen(false)}>✕</button>
+            </div>
+            <div className="cart-body">
+              {cart.length === 0
+                ? <div className="cart-empty"><span className="icon">🌿</span>Din korg är tom.<br />Hitta din ritual nedan.</div>
+                : cart.map(item => (
+                  <div key={item.id} className="cart-item">
+                    <div className="cart-item-img">{item.icon}</div>
+                    <div className="cart-item-info">
+                      <div className="cart-item-name">{item.name}{item.qty > 1 ? ` ×${item.qty}` : ""}</div>
+                      <div className="cart-item-price">{item.price}</div>
+                    </div>
+                    <button className="cart-item-remove" onClick={() => removeFromCart(item.id)}>✕</button>
+                  </div>
+                ))
+              }
+            </div>
+            {cart.length > 0 && (
+              <div className="cart-footer">
+                <div className="cart-total"><span>Totalt</span><span>{cartTotal} kr</span></div>
+                <button className="checkout-btn">Gå till kassan →</button>
+              </div>
+            )}
+          </div>
+
+          {/* TOAST */}
+          <div className={`toast${toast?" show":""}`}>✦ Lagd i korgen</div>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
